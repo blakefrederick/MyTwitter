@@ -11,6 +11,9 @@ struct TimelineView: View {
             List(viewModel.posts) { post in
                 PostRowView(post: post)
             }
+            .refreshable {
+                viewModel.fetchPosts()
+            }
             .listStyle(PlainListStyle())
             .navigationBarTitle("Home")
             .navigationBarItems(trailing:
