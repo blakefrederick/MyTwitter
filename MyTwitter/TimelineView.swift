@@ -8,29 +8,37 @@ struct TimelineView: View {
 
     var body: some View {
         NavigationView {
-            List(viewModel.posts) { post in
-                PostRowView(post: post)
-            }
-            .refreshable {
-                viewModel.fetchPosts()
-            }
-            .listStyle(PlainListStyle())
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .principal) {
-                    Button(action: {
-                        viewModel.fetchPosts()
-                    }) {
-                        Text("Home")
-                            .font(.headline)
-                    }
+            ScrollViewReader { proxy in
+                List(viewModel.posts) { post in
+                    PostRowView(post: post)
+                        .id(post.id)
                 }
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(action: {
-                        isDarkMode.toggle()
-                        UIApplication.shared.windows.first?.overrideUserInterfaceStyle = isDarkMode ? .dark : .light
-                    }) {
-                        Image(systemName: isDarkMode ? "sun.max.fill" : "moon.fill")
+                .refreshable {
+                    viewModel.fetchPosts()
+                }
+                .listStyle(PlainListStyle())
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .principal) {
+                        Button(action: {
+                            // Scroll to top 
+                            if let firstPostID = viewModel.posts.first?.id {
+                                withAnimation {
+                                    proxy.scrollTo(firstPostID, anchor: .top)
+                                }
+                            }
+                        }) {
+                            Text("Home")
+                                .font(.headline)
+                        }
+                    }
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button(action: {
+                            isDarkMode.toggle()
+                            UIApplication.shared.windows.first?.overrideUserInterfaceStyle = isDarkMode ? .dark : .light
+                        }) {
+                            Image(systemName: isDarkMode ? "sun.max.fill" : "moon.fill")
+                        }
                     }
                 }
             }
