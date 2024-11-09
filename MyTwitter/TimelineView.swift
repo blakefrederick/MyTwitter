@@ -15,15 +15,25 @@ struct TimelineView: View {
                 viewModel.fetchPosts()
             }
             .listStyle(PlainListStyle())
-            .navigationBarTitle("Home")
-            .navigationBarItems(trailing:
-                Button(action: {
-                    isDarkMode.toggle()
-                    UIApplication.shared.windows.first?.overrideUserInterfaceStyle = isDarkMode ? .dark : .light
-                }) {
-                    Image(systemName: isDarkMode ? "sun.max.fill" : "moon.fill")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .principal) {
+                    Button(action: {
+                        viewModel.fetchPosts()
+                    }) {
+                        Text("Home")
+                            .font(.headline)
+                    }
                 }
-            )
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button(action: {
+                        isDarkMode.toggle()
+                        UIApplication.shared.windows.first?.overrideUserInterfaceStyle = isDarkMode ? .dark : .light
+                    }) {
+                        Image(systemName: isDarkMode ? "sun.max.fill" : "moon.fill")
+                    }
+                }
+            }
         }
     }
 }
