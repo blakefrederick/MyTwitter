@@ -39,12 +39,18 @@ struct TimelineView: View {
                     ToolbarItem(placement: .navigationBarTrailing) {
                         Button(action: {
                             isDarkMode.toggle()
-                            UIApplication.shared.windows.first?.overrideUserInterfaceStyle = isDarkMode ? .dark : .light
+                            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                               let window = windowScene.windows.first {
+                                window.overrideUserInterfaceStyle = isDarkMode ? .dark : .light
+                            }
                         }) {
                             Image(systemName: isDarkMode ? "sun.max.fill" : "moon.fill")
                         }
                     }
                 }
+            }
+            .onAppear {
+                isDarkMode = colorScheme == .dark
             }
         }
     }
