@@ -39,18 +39,19 @@ struct PostRowView: View {
             
             // Post Content
             VStack(alignment: .leading, spacing: 4) {
-                Text(post.username)
-                    .font(.subheadline)
-                    .foregroundColor(.blue)
+                Text(post.title?.isEmpty == false ? post.title! : post.username)
+                    .font(.footnote) 
+                    .foregroundColor(.gray)
                     .onTapGesture {
-                        if let url = URL(string: post.username), UIApplication.shared.canOpenURL(url) {
+                        let urlString = post.title?.isEmpty == false ? post.username : post.username
+                        if let url = URL(string: urlString), UIApplication.shared.canOpenURL(url) {
                             openURL(url)
-                        } else if let url = URL(string: "https://" + post.username), UIApplication.shared.canOpenURL(url) {
+                        } else if let url = URL(string: "https://" + urlString), UIApplication.shared.canOpenURL(url) {
                             openURL(url)
                         }
                     }
-                
-                // Text with excess whitespace removed
+
+                // Post text with excess whitespace removed
                 Text(post.text.replacingOccurrences(of: "\\s+", with: " ", options: .regularExpression))
                     .font(.body)
                     .lineLimit(nil)
