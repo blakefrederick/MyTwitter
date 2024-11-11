@@ -5,6 +5,7 @@ struct PostRowView: View {
     var post: Post
     var onDelete: () -> Void
     @Environment(\.openURL) var openURL
+    @State private var showCopiedNotification = false
 
     var body: some View {
         HStack(alignment: .top, spacing: 12) {
@@ -83,6 +84,41 @@ struct PostRowView: View {
                 Label("Delete", systemImage: "trash")
             }
         }
+        .onLongPressGesture {
+            // copy to clipboard
+            UIPasteboard.general.string = post.text
+
+            withAnimation {
+                showCopiedNotification = true
+            }
+
+            // Haptic feedback!
+            let generator = UINotificationFeedbackGenerator()
+            generator.notificationOccurred(.success)
+
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                withAnimation {
+                    showCopiedNotification = false
+                }
+            }
+        }
+        .overlay(
+            Group {
+                if showCopiedNotification {
+                    VStack {
+                        Text("copied")
+                            .font(.caption)
+                            .padding(6)
+                            .background(Color.black.opacity(0.65))
+                            .foregroundColor(.white)
+                            .cornerRadius(6)
+                            .transition(.opacity)
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
+                    .padding([.bottom, .trailing], 6)
+                }
+            }
+        )
     }
     
     func getFaviconURL(from urlString: String) -> URL? {
