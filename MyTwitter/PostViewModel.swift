@@ -30,4 +30,17 @@ class PostViewModel: ObservableObject {
                 }
             }
     }
+
+    func deletePost(_ post: Post) {
+        guard let id = post.id else { return }
+        db.collection("posts").document(id).delete { error in
+            if let error = error {
+                print("Error deleting post: \(error)")
+            } else {
+                DispatchQueue.main.async {
+                    self.posts.removeAll { $0.id == id }
+                }
+            }
+        }
+    }
 }

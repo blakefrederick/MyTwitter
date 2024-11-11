@@ -3,6 +3,7 @@ import SwiftUI
 
 struct PostRowView: View {
     var post: Post
+    var onDelete: () -> Void
     @Environment(\.openURL) var openURL
 
     var body: some View {
@@ -75,6 +76,13 @@ struct PostRowView: View {
             }
         }
         .padding(.vertical, 8)
+        .swipeActions(edge: .trailing) {
+            Button(role: .destructive) {
+                onDelete()
+            } label: {
+                Label("Delete", systemImage: "trash")
+            }
+        }
     }
     
     func getFaviconURL(from urlString: String) -> URL? {

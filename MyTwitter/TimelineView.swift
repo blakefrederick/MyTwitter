@@ -9,9 +9,13 @@ struct TimelineView: View {
     var body: some View {
         NavigationView {
             ScrollViewReader { proxy in
-                List(viewModel.posts) { post in
-                    PostRowView(post: post)
+                List {
+                    ForEach(viewModel.posts) { post in
+                        PostRowView(post: post, onDelete: {
+                            viewModel.deletePost(post)
+                        })
                         .id(post.id)
+                    }
                 }
                 .refreshable {
                     viewModel.fetchPosts()
