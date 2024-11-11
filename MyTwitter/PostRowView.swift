@@ -22,7 +22,6 @@ struct PostRowView: View {
                             .frame(width: 48, height: 48)
                             .clipShape(Circle())
                     case .failure:
-                        // default fallback if no favicon found
                         Image(systemName: "person.crop.circle")
                             .resizable()
                             .frame(width: 48, height: 48)
@@ -78,44 +77,52 @@ struct PostRowView: View {
         }
         .padding(.vertical, 8)
         .swipeActions(edge: .trailing) {
+            // Delete on the right
             Button(role: .destructive) {
                 onDelete()
             } label: {
                 Label("Delete", systemImage: "trash")
             }
         }
-        .onLongPressGesture {
-            // copy to clipboard
-            UIPasteboard.general.string = post.text
+        .swipeActions(edge: .leading) {
+            // Copy on the left
+            Button {
+                UIPasteboard.general.string = post.text
 
-            withAnimation {
-                showCopiedNotification = true
-            }
-
-            // Haptic feedback!
-            let generator = UINotificationFeedbackGenerator()
-            generator.notificationOccurred(.success)
-
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
                 withAnimation {
-                    showCopiedNotification = false
+                    showCopiedNotification = true
                 }
+
+                // Haptic feedback!
+                let generator = UINotificationFeedbackGenerator()
+                generator.notificationOccurred(.success)
+
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                    withAnimation {
+                        showCopiedNotification = false
+                    }
+                }
+            } label: {
+                Label("Copy", systemImage: "doc.on.doc")
             }
+            .tint(.blue) 
         }
         .overlay(
             Group {
                 if showCopiedNotification {
                     VStack {
+                        Spacer()
                         Text("copied")
                             .font(.caption)
                             .padding(6)
                             .background(Color.black.opacity(0.65))
                             .foregroundColor(.white)
                             .cornerRadius(6)
+                            .padding(.bottom, 6)
                             .transition(.opacity)
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
-                    .padding([.bottom, .trailing], 6)
+                    .padding([.bottom, .trailing], 12)
                 }
             }
         )
