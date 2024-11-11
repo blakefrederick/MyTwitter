@@ -6,6 +6,7 @@ struct PostRowView: View {
     var onDelete: () -> Void
     @Environment(\.openURL) var openURL
     @State private var showCopiedNotification = false
+    let avatarSize: CGFloat = 34
 
     var body: some View {
         HStack(alignment: .top, spacing: 12) {
@@ -15,16 +16,16 @@ struct PostRowView: View {
                     switch phase {
                     case .empty:
                         ProgressView()
-                            .frame(width: 48, height: 48)
+                            .frame(width: avatarSize, height: avatarSize)
                     case .success(let image):
                         image
                             .resizable()
-                            .frame(width: 48, height: 48)
+                            .frame(width: avatarSize, height: avatarSize)
                             .clipShape(Circle())
                     case .failure:
                         Image(systemName: "person.crop.circle")
                             .resizable()
-                            .frame(width: 48, height: 48)
+                            .frame(width: avatarSize, height: avatarSize)
                             .foregroundColor(.blue)
                     @unknown default:
                         EmptyView()
@@ -33,7 +34,7 @@ struct PostRowView: View {
             } else {
                 Image(systemName: "person.crop.circle")
                     .resizable()
-                    .frame(width: 48, height: 48)
+                    .frame(width: avatarSize, height: avatarSize)
                     .foregroundColor(.blue)
             }
             
