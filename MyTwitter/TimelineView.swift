@@ -14,7 +14,26 @@ struct TimelineView: View {
                         PostRowView(post: post, onDelete: {
                             viewModel.deletePost(post)
                         })
-                        .id(post.id)
+                        .id(post.id) 
+                    }
+                    
+                    // Scroll to top
+                    Button(action: {
+                        if let firstPostID = viewModel.posts.first?.id {
+                            withAnimation {
+                                proxy.scrollTo(firstPostID, anchor: .top)
+                            }
+                        }
+                    }) {
+                        HStack {
+                            Spacer()
+                            Image(systemName: "arrow.up.circle")
+                                .resizable()
+                                .frame(width: 30, height: 30)
+                                .foregroundColor(.blue)
+                            Spacer()
+                        }
+                        .padding(.vertical)
                     }
                 }
                 .refreshable {
@@ -48,9 +67,9 @@ struct TimelineView: View {
                         }
                     }
                 }
-            }
-            .onAppear {
-                isDarkMode = colorScheme == .dark
+                .onAppear {
+                    isDarkMode = colorScheme == .dark
+                }
             }
         }
     }
