@@ -11,16 +11,16 @@ struct TimelineView: View {
             ScrollViewReader { proxy in
                 List {
                     ForEach(viewModel.posts) { post in
-                        PostRowView(post: post, 
-                        onDelete: {
-                            viewModel.deletePost(post)
-                        },
-                        onSuperDelete: {
-                            viewModel.superDeletePost(post)
-                        })
-                        .id(post.id) 
+                        PostRowView(post: post,
+                                    onDelete: {
+                                        viewModel.deletePost(post)
+                                    },
+                                    onSuperDelete: {
+                                        viewModel.superDeletePost(post)
+                                    })
+                                    .id(post.id)
                     }
-                    
+
                     // Scroll to top
                     Button(action: {
                         if let firstPostID = viewModel.posts.first?.id {
@@ -48,7 +48,7 @@ struct TimelineView: View {
                 .toolbar {
                     ToolbarItem(placement: .principal) {
                         Button(action: {
-                            // Scroll to top 
+                            // Scroll to top
                             if let firstPostID = viewModel.posts.first?.id {
                                 withAnimation {
                                     proxy.scrollTo(firstPostID, anchor: .top)
@@ -63,7 +63,8 @@ struct TimelineView: View {
                         Button(action: {
                             isDarkMode.toggle()
                             if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-                               let window = windowScene.windows.first {
+                               let window = windowScene.windows.first
+                            {
                                 window.overrideUserInterfaceStyle = isDarkMode ? .dark : .light
                             }
                         }) {

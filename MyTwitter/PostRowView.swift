@@ -15,21 +15,21 @@ struct PostRowView: View {
             if let faviconURL = getFaviconURL(from: post.username) {
                 AsyncImage(url: faviconURL) { phase in
                     switch phase {
-                    case .empty:
-                        ProgressView()
-                            .frame(width: avatarSize, height: avatarSize)
-                    case .success(let image):
-                        image
-                            .resizable()
-                            .frame(width: avatarSize, height: avatarSize)
-                            .clipShape(Circle())
-                    case .failure:
-                        Image(systemName: "person.crop.circle")
-                            .resizable()
-                            .frame(width: avatarSize, height: avatarSize)
-                            .foregroundColor(.blue)
-                    @unknown default:
-                        EmptyView()
+                        case .empty:
+                            ProgressView()
+                                .frame(width: avatarSize, height: avatarSize)
+                        case let .success(image):
+                            image
+                                .resizable()
+                                .frame(width: avatarSize, height: avatarSize)
+                                .clipShape(Circle())
+                        case .failure:
+                            Image(systemName: "person.crop.circle")
+                                .resizable()
+                                .frame(width: avatarSize, height: avatarSize)
+                                .foregroundColor(.blue)
+                        @unknown default:
+                            EmptyView()
                     }
                 }
             } else {
@@ -38,7 +38,7 @@ struct PostRowView: View {
                     .frame(width: avatarSize, height: avatarSize)
                     .foregroundColor(.blue)
             }
-            
+
             // Post Content
             VStack(alignment: .leading, spacing: 4) {
                 HStack(alignment: .firstTextBaseline, spacing: 2) {
@@ -46,9 +46,9 @@ struct PostRowView: View {
                     Text(post.title?.isEmpty == false ? post.title! : post.username)
                         .font(.footnote)
                         .foregroundColor(.gray)
-                        .lineLimit(1) 
-                    
-                    // Domain 
+                        .lineLimit(1)
+
+                    // Domain
                     if let title = post.title, !title.isEmpty, let domain = extractDomainFromURL(post.username) {
                         Text("   \(domain)")
                             .font(.caption2) // smaller
@@ -68,22 +68,22 @@ struct PostRowView: View {
                 Text(post.text.replacingOccurrences(of: "\\s+", with: " ", options: .regularExpression))
                     .font(.body)
                     .lineLimit(nil)
-                
+
                 // Image
                 if let imageUrl = URL(string: post.imageUrl), !post.imageUrl.isEmpty {
                     AsyncImage(url: imageUrl) { phase in
                         switch phase {
-                        case .empty:
-                            ProgressView()
-                        case .success(let image):
-                            image
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .frame(maxHeight: 200)
-                        case .failure:
-                            EmptyView()
-                        @unknown default:
-                            EmptyView()
+                            case .empty:
+                                ProgressView()
+                            case let .success(image):
+                                image
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(maxHeight: 200)
+                            case .failure:
+                                EmptyView()
+                            @unknown default:
+                                EmptyView()
                         }
                     }
                 }

@@ -1,5 +1,5 @@
-import Foundation
 import FirebaseFirestore
+import Foundation
 
 struct Post: Identifiable, Decodable {
     @DocumentID var id: String?

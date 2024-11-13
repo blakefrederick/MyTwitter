@@ -1,0 +1,6 @@
+--indent 4
+--indentcase true
+--linebreaks lf
+--ifdef no-indent
+--stripunusedargs closure-only
+--self remove

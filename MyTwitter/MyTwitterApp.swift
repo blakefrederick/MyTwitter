@@ -1,5 +1,5 @@
-import SwiftUI
 import FirebaseCore
+import SwiftUI
 
 @main
 struct MyTwitterApp: App {
