@@ -40,18 +40,29 @@ struct PostRowView: View {
             
             // Post Content
             VStack(alignment: .leading, spacing: 4) {
-                Text(post.title?.isEmpty == false ? post.title! : post.username)
-                    .font(.footnote) 
-                    .foregroundColor(.gray)
-                    .onTapGesture {
-                        let urlString = post.title?.isEmpty == false ? post.username : post.username
-                        if let url = URL(string: urlString), UIApplication.shared.canOpenURL(url) {
-                            openURL(url)
-                        } else if let url = URL(string: "https://" + urlString), UIApplication.shared.canOpenURL(url) {
-                            openURL(url)
-                        }
+                HStack(alignment: .firstTextBaseline, spacing: 2) {
+                    // Title or Username
+                    Text(post.title?.isEmpty == false ? post.title! : post.username)
+                        .font(.footnote)
+                        .foregroundColor(.gray)
+                        .lineLimit(1) 
+                    
+                    // Domain 
+                    if let title = post.title, !title.isEmpty, let domain = extractDomainFromURL(post.username) {
+                        Text("   \(domain)")
+                            .font(.caption2) // smaller
+                            .foregroundColor(.gray.opacity(0.7))
+                            .lineLimit(1)
                     }
-
+                }
+                .onTapGesture {
+                    let urlString = post.title?.isEmpty == false ? post.username : post.username
+                    if let url = URL(string: urlString), UIApplication.shared.canOpenURL(url) {
+                        openURL(url)
+                    } else if let url = URL(string: "https://" + urlString), UIApplication.shared.canOpenURL(url) {
+                        openURL(url)
+                    }
+                }
                 // Post text with excess whitespace removed
                 Text(post.text.replacingOccurrences(of: "\\s+", with: " ", options: .regularExpression))
                     .font(.body)
@@ -140,5 +151,10 @@ struct PostRowView: View {
             return URL(string: faviconURLString)
         }
         return nil
+    }
+
+    func extractDomainFromURL(_ urlString: String) -> String? {
+        guard let url = URL(string: urlString) else { return nil }
+        return url.host?.replacingOccurrences(of: "www.", with: "")
     }
 }
