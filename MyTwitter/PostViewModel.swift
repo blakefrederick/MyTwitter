@@ -43,4 +43,41 @@ class PostViewModel: ObservableObject {
             }
         }
     }
+
+    func superDeletePost(_ post: Post) {
+        let username = post.username
+
+        db.collection("posts")
+            .whereField("username", isEqualTo: username)
+            .getDocuments { (snapshot, error) in
+
+                guard let documents = snapshot?.documents else { return }
+
+                let batch = self.db.batch()
+
+                for document in documents {
+                    batch.deleteDocument(document.reference)
+                }
+
+                batch.commit { (error) in
+                    if let error = error {
+                        print("Error performing super delete: \(error)")
+                    } else {
+                        DispatchQueue.main.async {
+                            // Remove the posts from the "Timeline"
+                            self.posts.removeAll { $0.username == username }
+                        }
+                    }
+                }
+            }
+
+        // Keep a record of deleted URLs
+        db.collection("deletedUrls").addDocument(data: ["url": username]) { error in
+            if let error = error {
+                print("Error adding URL to deletedUrls: \(error)")
+            } else {
+                print("URL added to deletedUrls: \(username)")
+            }
+        }
+    }
 }

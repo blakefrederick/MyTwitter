@@ -11,8 +11,12 @@ struct TimelineView: View {
             ScrollViewReader { proxy in
                 List {
                     ForEach(viewModel.posts) { post in
-                        PostRowView(post: post, onDelete: {
+                        PostRowView(post: post, 
+                        onDelete: {
                             viewModel.deletePost(post)
+                        },
+                        onSuperDelete: {
+                            viewModel.superDeletePost(post)
                         })
                         .id(post.id) 
                     }

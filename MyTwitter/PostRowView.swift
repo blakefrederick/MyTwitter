@@ -4,6 +4,7 @@ import SwiftUI
 struct PostRowView: View {
     var post: Post
     var onDelete: () -> Void
+    var onSuperDelete: () -> Void
     @Environment(\.openURL) var openURL
     @State private var showCopiedNotification = false
     let avatarSize: CGFloat = 34
@@ -96,6 +97,13 @@ struct PostRowView: View {
             } label: {
                 Label("Delete", systemImage: "trash")
             }
+            // Super Delete
+            Button {
+                onSuperDelete()
+            } label: {
+                Label("Del All", systemImage: "trash.slash")
+            }
+            .tint(Color(red: 0.5, green: 0, blue: 0.5))
         }
         .swipeActions(edge: .leading) {
             // Copy on the left
@@ -118,7 +126,7 @@ struct PostRowView: View {
             } label: {
                 Label("Copy", systemImage: "doc.on.doc")
             }
-            .tint(.blue) 
+            .tint(.blue)
         }
         .overlay(
             Group {
@@ -140,7 +148,7 @@ struct PostRowView: View {
             }
         )
     }
-    
+
     func getFaviconURL(from urlString: String) -> URL? {
         var urlString = urlString
         if !urlString.contains("://") {
