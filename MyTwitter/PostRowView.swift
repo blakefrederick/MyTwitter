@@ -8,6 +8,7 @@ struct PostRowView: View {
     var onFavourite: () -> Void
     @Environment(\.openURL) var openURL
     @State private var showCopiedNotification = false
+    @State private var showFavouriteAnimation = false
     let avatarSize: CGFloat = 34
 
     var body: some View {
@@ -52,7 +53,7 @@ struct PostRowView: View {
                     // Domain
                     if let title = post.title, !title.isEmpty, let domain = extractDomainFromURL(post.username) {
                         Text("   \(domain)")
-                            .font(.caption2) // smaller
+                            .font(.caption2)
                             .foregroundColor(.gray.opacity(0.7))
                             .lineLimit(1)
                     }
@@ -65,6 +66,7 @@ struct PostRowView: View {
                         openURL(url)
                     }
                 }
+
                 // Post text with excess whitespace removed
                 Text(post.text.replacingOccurrences(of: "\\s+", with: " ", options: .regularExpression))
                     .font(.body)
@@ -130,11 +132,26 @@ struct PostRowView: View {
             .tint(.blue)
             // Favourite
             Button {
-                // onFavourite()
+                onFavourite()
+
+                // Haptic feedback!
+                let generator = UIImpactFeedbackGenerator(style: .medium)
+                generator.impactOccurred()
+
+                // Simple star animation
+                withAnimation(.easeInOut(duration: 0.5)) {
+                    showFavouriteAnimation = true
+                }
+
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                    withAnimation {
+                        showFavouriteAnimation = false
+                    }
+                }
             } label: {
-                Label("Favourite", systemImage: "star")
+                Label("Favourite", systemImage: "star.fill")
             }
-            .tint(.yellow)
+            .tint(.black)
         }
         .overlay(
             Group {
@@ -152,6 +169,13 @@ struct PostRowView: View {
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
                     .padding([.bottom, .trailing], 12)
+                }
+                if showFavouriteAnimation {
+                    Image(systemName: "star.fill")
+                        .font(.largeTitle)
+                        .foregroundColor(.yellow)
+                        .scaleEffect(2.22)
+                        .transition(.scale)
                 }
             }
         )
