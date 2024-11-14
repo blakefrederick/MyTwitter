@@ -17,6 +17,9 @@ struct TimelineView: View {
                                     },
                                     onSuperDelete: {
                                         viewModel.superDeletePost(post)
+                                    },
+                                    onFavourite: {
+                                        viewModel.favouritePost(post)
                                     })
                                     .id(post.id)
                     }

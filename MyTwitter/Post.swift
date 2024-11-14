@@ -8,4 +8,6 @@ struct Post: Identifiable, Decodable {
     let text: String
     let imageUrl: String
     let timestamp: Date
+    let favouriteCount: Int?
+    let favouriteTimestamp: Date?
 }

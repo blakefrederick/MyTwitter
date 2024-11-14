@@ -5,6 +5,7 @@ struct PostRowView: View {
     var post: Post
     var onDelete: () -> Void
     var onSuperDelete: () -> Void
+    var onFavourite: () -> Void
     @Environment(\.openURL) var openURL
     @State private var showCopiedNotification = false
     let avatarSize: CGFloat = 34
@@ -127,6 +128,13 @@ struct PostRowView: View {
                 Label("Copy", systemImage: "doc.on.doc")
             }
             .tint(.blue)
+            // Favourite
+            Button {
+                // onFavourite()
+            } label: {
+                Label("Favourite", systemImage: "star")
+            }
+            .tint(.yellow)
         }
         .overlay(
             Group {

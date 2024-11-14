@@ -31,6 +31,21 @@ class PostViewModel: ObservableObject {
             }
     }
 
+    func favouritePost(_ post: Post) {
+        guard let id = post.id else { return }
+
+        let postRef = db.collection("posts").document(id)
+
+        postRef.updateData([
+            "favouriteCount": FieldValue.increment(Int64(1)),
+            "favouriteTimestamp": Date(),
+        ]) { error in
+            if let error = error {
+                print("Error updating post: \(error)")
+            }
+        }
+    }
+
     func deletePost(_ post: Post) {
         guard let id = post.id else { return }
         db.collection("posts").document(id).delete { error in
