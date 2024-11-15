@@ -97,7 +97,7 @@ struct PostRowView: View {
                     }
                     .layoutPriority(1)
                 }
-                .padding(.vertical, 8)
+                .padding(.vertical, 4)
 
                 // Favourite Star
                 HStack {
