@@ -9,46 +9,44 @@ struct TimelineView: View {
     var body: some View {
         NavigationView {
             ScrollViewReader { proxy in
-                ScrollView {
-                    LazyVStack(spacing: 0) {
-                        ForEach(viewModel.posts) { post in
-                            PostRowView(post: post,
-                                        onDelete: {
-                                            viewModel.deletePost(post)
-                                        },
-                                        onSuperDelete: {
-                                            viewModel.superDeletePost(post)
-                                        },
-                                        onFavourite: {
-                                            viewModel.favouritePost(post)
-                                        })
-                                        .id(post.id)
-                        }
-
-                        // Scroll to top
-                        Button(action: {
-                            if let firstPostID = viewModel.posts.first?.id {
-                                withAnimation {
-                                    proxy.scrollTo(firstPostID, anchor: .top)
-                                }
-                            }
-                        }) {
-                            HStack {
-                                Spacer()
-                                Image(systemName: "arrow.up.circle")
-                                    .resizable()
-                                    .frame(width: 30, height: 30)
-                                    .foregroundColor(.blue)
-                                Spacer()
-                            }
-                            .padding(.vertical)
-                        }
+                List {
+                    ForEach(viewModel.posts) { post in
+                        PostRowView(post: post,
+                                    onDelete: {
+                                        viewModel.deletePost(post)
+                                    },
+                                    onSuperDelete: {
+                                        viewModel.superDeletePost(post)
+                                    },
+                                    onFavourite: {
+                                        viewModel.favouritePost(post)
+                                    })
+                                    .id(post.id)
                     }
-                    .padding([.horizontal, .top], 16)
+
+                    // Scroll to top
+                    Button(action: {
+                        if let firstPostID = viewModel.posts.first?.id {
+                            withAnimation {
+                                proxy.scrollTo(firstPostID, anchor: .top)
+                            }
+                        }
+                    }) {
+                        HStack {
+                            Spacer()
+                            Image(systemName: "arrow.up.circle")
+                                .resizable()
+                                .frame(width: 30, height: 30)
+                                .foregroundColor(.blue)
+                            Spacer()
+                        }
+                        .padding(.vertical)
+                    }
                 }
                 .refreshable {
                     viewModel.fetchPosts()
                 }
+                .listStyle(PlainListStyle())
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
                     ToolbarItem(placement: .principal) {

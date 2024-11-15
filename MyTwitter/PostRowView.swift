@@ -98,6 +98,7 @@ struct PostRowView: View {
                     .layoutPriority(1)
                 }
                 .padding(.vertical, 4)
+                .padding(.horizontal, 4)
 
                 // Favourite Star
                 HStack {
@@ -139,9 +140,11 @@ struct PostRowView: View {
                     }
                 }
                 .padding(.trailing, 8)
-                .padding(.bottom, 4)
+                .padding(.bottom, 2)
             }
+            .background(Color(.systemBackground))
         }
+        .listRowBackground(Color.clear)
         .swipeActions(edge: .trailing) {
             // Delete on the right
             Button(role: .destructive) {
@@ -199,6 +202,7 @@ struct PostRowView: View {
                 }
             }
         )
+        .zIndex(showFavouriteAnimation ? 1 : 0) 
     }
 
     // Helper functions
