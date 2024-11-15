@@ -231,11 +231,11 @@ struct StarburstView: View {
                     .resizable()
                     .frame(width: 6, height: 6)
                     .foregroundColor(randomColor())
-                    .offset(y: -20)
+                    .offset(y: animate ? -40 : -20)
                     .rotationEffect(.degrees(Double(i) * 30))
                     .opacity(animate ? 0 : 1)
                     .scaleEffect(animate ? 2 : 1)
-                    .animation(Animation.easeOut(duration: 0.5).delay(Double(i) * 0.02), value: animate)
+                    .animation(Animation.easeOut(duration: 0.5), value: animate)
             }
         }
         .onAppear {
